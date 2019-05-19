@@ -26,7 +26,9 @@ module.exports = {
     SixthIntent() {
         this.$user.$data.selectedArticleIndex = 5;
         return this.toIntent('ArticleInfoIntent');
-    }
+    },
+
+    // // TODO: always activated
     // Unhandled() {
     //     /**
     //      * Fallback intent. If the user did not use ordinal selection, repromt and try again.

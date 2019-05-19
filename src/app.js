@@ -86,19 +86,6 @@ app.setHandler({
         this.followUpState('ORDINAL_SELECTION_STATE').displayText(written.toString()).ask(speech)
     },
 
-    ON_ELEMENT_SELECTED() {
-        /**
-         * Called after user selects an element in a card, gets the selected item id (article INDEX)
-         *
-         */
-
-        this.$user.$data.selectedArticleIndex = parseInt(this.getSelectedElementId());
-
-        return this.toIntent('ArticleInfoIntent');
-    },
-
-    ORDINAL_SELECTION_STATE,
-
     ArticleInfoIntent() {
 
         // Get article data using stored index
@@ -219,6 +206,19 @@ app.setHandler({
         }
 
     },
+
+    ON_ELEMENT_SELECTED() {
+        /**
+         * Called after user selects an element in a card, gets the selected item id (article INDEX)
+         *
+         */
+
+        this.$user.$data.selectedArticleIndex = parseInt(this.getSelectedElementId());
+
+        return this.toIntent('ArticleInfoIntent');
+    },
+
+    ORDINAL_SELECTION_STATE,
 
     HelpIntent() {
 

@@ -9,7 +9,7 @@ describe(`Testing Google Assistant Integration`, () => {
 
     const testSuite = new GoogleAssistant().makeTestSuite();
 
-    test('Launch intent should contain welcome key', async () => {
+    test('Launch intent should initialize variables', async () => {
 
         const conversation = testSuite.conversation({locale: 'keys-only'});
 
@@ -17,12 +17,12 @@ describe(`Testing Google Assistant Integration`, () => {
         const responseLaunchRequest = await conversation.send(launchRequest);
 
         expect(
-            responseLaunchRequest.getSpeech()
-        ).toContain('welcome');
-
-        expect(
             conversation.$user.$data.articles.length
         ).toBeGreaterThan(1);
+
+        expect(
+            conversation.$user.$data.isWelcome
+        ).toBe(false);
 
         expect(
             conversation.$user.$data.selectedArticleIndex
@@ -87,8 +87,7 @@ describe(`Testing Google Assistant Integration`, () => {
         //See that speech regarding Article card is good
         expect(
             responseIntentRequest.getSpeech()
-        ).toContain('summary.intro');
-
+        ).toContain('snippet.intro');
 
         await conversation.clearDb();
 
@@ -106,7 +105,7 @@ describe(`Testing Google Assistant Integration`, () => {
         //See that speech regarding Article card is good
         expect(
             responseIntentRequest.getSpeech()
-        ).toMatch(`summary.intro Frozen treats: Navigating the options 2 <break time="0.5s"/>When it’s my<break time="0.7s"/> see.related`);
+        ).toMatch(`snippet.intro Frozen treats: Navigating the options 2 <break time="0.5s"/>When it’s my<break time="0.7s"/> email.link`);
 
 
         await conversation.clearDb();
@@ -128,20 +127,33 @@ describe(`Testing Google Assistant Integration`, () => {
         //See that speech regarding Article card contains CMS text
         expect(
             responseIntentRequest.getSpeech()
-        ).toContain('see.related');
+        ).toContain('email.link');
 
         await conversation.clearDb();
 
     });
 
-    test('Next article intent', async () => {
+    test('Email article intent', async () => {
 
         const conversation = testSuite.conversation({locale: 'keys-only'});
-        conversation.$user.$data.selectedArticleIndex = 1;
+        conversation.$user.$data.selectedArticleIndex = 2;
         conversation.$user.$data.articles = testArticles;
 
         let IntentRequest = await testSuite.requestBuilder.intent('ArticleInfoIntent');
         await conversation.send(IntentRequest);
+
+        conversation.$user.$data.accountData = {
+            "given_name": "Marko",
+            "email": "mrk.arezina@gmail.com"
+        };
+
+        //Test send email
+        IntentRequest = await testSuite.requestBuilder.intent('EmailStoryIntent');
+        const responseIntentRequest = await conversation.send(IntentRequest);
+        expect(
+            responseIntentRequest.getSpeech()
+        ).toContain('email.sent.confirmation');
+
 
         IntentRequest = await testSuite.requestBuilder.intent('NextStory');
         await conversation.send(IntentRequest);
@@ -149,42 +161,42 @@ describe(`Testing Google Assistant Integration`, () => {
         //Expect one increase
         expect(
             conversation.$user.$data.selectedArticleIndex
-        ).toBe(2);
+        ).toBe(3);
 
         await conversation.clearDb();
 
     });
 
-    test('Test Related articles intent', async () => {
-
-        const conversation = testSuite.conversation({locale: 'keys-only'});
-        conversation.$user.$data.selectedArticleIndex = 0;
-        conversation.$user.$data.articles = testArticles;
-
-        let IntentRequest = await testSuite.requestBuilder.intent('ArticleInfoIntent');
-        await conversation.send(IntentRequest);
-
-        IntentRequest = await testSuite.requestBuilder.intent('ExplainableRelatedArticlesIntent');
-        let responseIntentRequest = await conversation.send(IntentRequest);
-
-        //To see if related content API worked
-        expect(
-            conversation.$user.$data.articles.length
-        ).toBeGreaterThan(1);
-
-        //Test for explainable relations
-        expect(
-            responseIntentRequest.getSpeech()
-        ).toContain('also');
-
-        //See that speech regarding Article card contains CMS text
-        expect(
-            responseIntentRequest.getSpeech()
-        ).toContain('which.related');
-
-        await conversation.clearDb();
-
-    });
+    // test('Test Related articles intent', async () => {
+    //
+    //     const conversation = testSuite.conversation({locale: 'keys-only'});
+    //     conversation.$user.$data.selectedArticleIndex = 0;
+    //     conversation.$user.$data.articles = testArticles;
+    //
+    //     let IntentRequest = await testSuite.requestBuilder.intent('ArticleInfoIntent');
+    //     await conversation.send(IntentRequest);
+    //
+    //     IntentRequest = await testSuite.requestBuilder.intent('ExplainableRelatedArticlesIntent');
+    //     let responseIntentRequest = await conversation.send(IntentRequest);
+    //
+    //     //To see if related content API worked
+    //     expect(
+    //         conversation.$user.$data.articles.length
+    //     ).toBeGreaterThan(1);
+    //
+    //     //Test for explainable relations
+    //     expect(
+    //         responseIntentRequest.getSpeech()
+    //     ).toContain('also');
+    //
+    //     //See that speech regarding Article card contains CMS text
+    //     expect(
+    //         responseIntentRequest.getSpeech()
+    //     ).toContain('which.related');
+    //
+    //     await conversation.clearDb();
+    //
+    // });
 
     test('Test Help menu. See if help menu turns true, and turns false after', async () => {
 
@@ -236,7 +248,7 @@ const testArticles = [
         'title': 'Frozen treats: Navigating the options 3',
         'date': '7/22/2019',
         'url': 'https://www.health.harvard.edu/blog/frozen-treats-navigating-the-options-2019030116092',
-        'summary': 'When it’s my',
+        'summary': 'When it comes to low-calorie sweeteners, you have a lot of choices. Theres the blue one, the pink one, the yellow one, or the green one. Stevia is considered a natural non-caloric sweetener. Saccharin and sucralose are considered non-nutritive sweeteners (few or no calories). Aspartame is a nutritive sweetener (adds some calories but far less than sugar). Over time, such empty calories can add up to many pounds of weight gain. Are there downsides to non-sugar sweeteners? Despite the rationale above, the effectiveness of using NSSs to lose weight, avoid weight gain, or achieve other health benefits is unproven. In fact, some studies (such as this one) found that people who often drank diet soda actually became obese more often than those who drank less diet soda or none. No clear health benefits were observed with NSS use, but potential harms could not be excluded. The quality of the research to date wasnt very good, and no definitive conclusions could be made regarding NSS use and these important health effects.',
         'img_url': 'https://hhp-blog.s3.amazonaws.com/2018/09/IMG_6180_Edit-1024x768.png'
     },
     {
