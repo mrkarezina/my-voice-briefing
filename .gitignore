@@ -1,0 +1,8 @@
+node_modules/
+db/
+bundle/
+platforms/
+bundle.zip
+.env
+my-voice-briefing-69374866809a.json
+firebase-private-key.json

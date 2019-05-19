@@ -1,0 +1,225 @@
+{
+  "invocation": "health news",
+  "intents": [
+    {
+      "name": "FirstStoryIntent",
+      "phrases": [
+        "first story",
+        "First Story 📰",
+        "1st",
+        "first article",
+        "give me my first story",
+        "home",
+        "first"
+      ]
+    },
+    {
+      "name": "NextStory",
+      "phrases": [
+        "next story",
+        "next",
+        "next article",
+        "next one",
+        "onward",
+        "continue",
+        "Next ⏩"
+      ]
+    },
+    {
+      "name": "InitialContentIntent",
+      "phrases": [
+        "trending articles",
+        "see trending articles",
+        "show me headlines",
+        "full headlines",
+        "top headlines",
+        "latest headlines",
+        "latest stories",
+        "show me stories",
+        "trending stories",
+        "headlines",
+        "go home",
+        "latest stories",
+        "Headlines 🔥"
+      ]
+    },
+    {
+      "name": "ExplainableRelatedArticlesIntent",
+      "phrases": [
+        "related articles",
+        "see related articles",
+        "show me related headlines",
+        "related headlines",
+        "show me related stories",
+        "related stories",
+        "related",
+        "Related ⏬"
+      ]
+    },
+    {
+      "name": "HelpIntent",
+      "phrases": [
+        "help",
+        "what can you do",
+        "features",
+        "you're dumb",
+        "dumb bot",
+        "I need help",
+        "help me",
+        "menu",
+        "home menu"
+      ]
+    },
+    {
+      "name": "AboutIntent",
+      "phrases": [
+        "who are you",
+        "about",
+        "why do you exist",
+        "who created you",
+        "contact info",
+        "hi",
+        "hello"
+      ]
+    },
+    {
+      "name": "FirstIntent",
+      "phrases": [
+        "1st story",
+        "1st one",
+        "first",
+        "first story"
+      ]
+    },
+    {
+      "name": "SecondIntent",
+      "phrases": [
+        "2nd story",
+        "2nd one",
+        "second",
+        "second story"
+      ]
+    },
+    {
+      "name": "ThirdIntent",
+      "phrases": [
+        "3rd story",
+        "3rd one",
+        "third",
+        "third story"
+      ]
+    },
+    {
+      "name": "FourthIntent",
+      "phrases": [
+        "4th story",
+        "4th",
+        "fourth one",
+        "fourth",
+        "fourth story"
+      ]
+    },
+    {
+      "name": "FifthIntent",
+      "phrases": [
+        "5th story",
+        "5th one",
+        "fifth one",
+        "fifth",
+        "fifth story"
+      ]
+    },
+    {
+      "name": "SixthIntent",
+      "phrases": [
+        "6th story",
+        "6th one",
+        "sixth one",
+        "sixth",
+        "sixth story"
+      ]
+    },
+    {
+      "name": "END",
+      "phrases": [
+        "bye",
+        "bye now",
+        "go away",
+        "see you later"
+      ]
+    },
+    {
+      "name": "YesIntent",
+      "phrases": [
+        "go back",
+        "yes",
+        "yeah",
+        "ok",
+        "alright",
+        "yep",
+        "okay",
+        "sure",
+        "yes please",
+        "yeah please"
+      ],
+      "alexa": {
+        "name": "AMAZON.YesIntent",
+        "samples": []
+      }
+    },
+    {
+      "name": "NoIntent",
+      "phrases": [
+        "no",
+        "nope",
+        "na",
+        "don't",
+        "I don't"
+      ],
+      "alexa": {
+        "name": "AMAZON.NoIntent",
+        "samples": []
+      }
+    }
+  ],
+  "alexa": {
+    "interactionModel": {
+      "languageModel": {
+        "intents": [
+          {
+            "name": "AMAZON.CancelIntent",
+            "samples": []
+          },
+          {
+            "name": "AMAZON.HelpIntent",
+            "samples": []
+          },
+          {
+            "name": "AMAZON.StopIntent",
+            "samples": []
+          }
+        ]
+      }
+    }
+  },
+  "dialogflow": {
+    "intents": [
+      {
+        "name": "Default Fallback Intent",
+        "auto": true,
+        "webhookUsed": true,
+        "fallbackIntent": true
+      },
+      {
+        "name": "Default Welcome Intent",
+        "auto": true,
+        "webhookUsed": true,
+        "events": [
+          {
+            "name": "WELCOME"
+          }
+        ]
+      }
+    ]
+  }
+}
