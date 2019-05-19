@@ -42,7 +42,6 @@ app.setHandler({
     },
 
 
-
     InitialContentIntent() {
         /**
          * Used to give a list of headline choices to user
@@ -55,10 +54,11 @@ app.setHandler({
         let speech = '';
         let written = '';
 
-        //Add welcome message if just launched
-        if(this.$user.$data.isWelcome) {
+        if (this.$user.$data.isWelcome) {
+            //Add welcome message if just launched
+
             speech += this.t('welcome');
-            written += this.t('welcome.written');
+            written += this.t('welcome.written') + ' ';
 
             this.$user.$data.isWelcome = false;
         }
@@ -67,7 +67,7 @@ app.setHandler({
             //This acts as the help menu, since HelpIntent is a redirect
 
             speech += `${this.t('help.menu')} <break time="0.5s"/>`;
-            written += this.t('help.menu.written');
+            written += this.t('help.menu.written') + ' ';
 
             this.$user.$data.isHelp = false
         }
@@ -86,24 +86,36 @@ app.setHandler({
         this.followUpState('ORDINAL_SELECTION_STATE').displayText(written.toString()).ask(speech)
     },
 
+    ON_ELEMENT_SELECTED() {
+        /**
+         * Called after user selects an element in a card, gets the selected item id (article INDEX)
+         *
+         */
+
+        this.$user.$data.selectedArticleIndex = parseInt(this.getSelectedElementId());
+
+        return this.toIntent('ArticleInfoIntent');
+    },
+
+    ORDINAL_SELECTION_STATE,
+
     ArticleInfoIntent() {
 
         // Get article data using stored index
         const selectedArticleIndex = this.$user.$data.selectedArticleIndex;
         const article = this.$user.$data.articles[selectedArticleIndex];
 
-        let speech = `${this.t('summary.intro')} ${article['title']} <break time="0.5s"/>`;
+        let speech = `${this.t('snippet.intro')} ${article['title']} <break time="0.5s"/>`;
         speech += article['summary'];
-        speech += `<break time="0.7s"/> ${this.t('see.related')}`;
+        speech += `<break time="0.7s"/> ${this.t('email.link')}`;
 
         const basicCard = ArticleInfoCardBuilder(article);
         this.$googleAction.showBasicCard(basicCard);
-        this.$googleAction.showSuggestionChips(['Related ⏬', 'Next ⏩']);
+        this.$googleAction.showSuggestionChips(['Yes ✉️', 'No']);
 
         //TODO: need to sign in for email message
-        this.followUpState('EMAIL_STORY_LINK_CHOICE').displayText(this.t('see.related.written').toString()).ask(speech);
+        this.followUpState('EMAIL_STORY_LINK_CHOICE').displayText(this.t('email.link.written').toString()).ask(speech);
     },
-
 
     EMAIL_STORY_LINK_CHOICE: {
         /**
@@ -113,19 +125,12 @@ app.setHandler({
          */
 
         YesIntent() {
-            /**
-             * Redirect in context: Would you like to see related?
-             */
-
             return this.toIntent('EmailStoryIntent');
         },
 
         NoIntent() {
-            /**
-             * Redirect in context: Would you like to see related?
-             */
-
-            //TODO
+            this.followUpState('SELECT_NEXT_MOVE').ask(this.t('related.or.next'))
+            this.$googleAction.showSuggestionChips(['Related ⏬', 'Next ⏩']);
         },
     },
 
@@ -133,7 +138,7 @@ app.setHandler({
 
         const userData = this.$user.$data.accountData;
 
-        if(!userData) {
+        if (!userData) {
             //If no user data, go through account linking flow
             return this.showAccountLinkingCard();
 
@@ -147,16 +152,19 @@ app.setHandler({
 
             sendArticleLinkEmail(article, given_name, email);
 
-            this.tell('Email sent!');
+            let speech = this.t('email.sent.confirmation');
+            speech += this.t('related.or.next');
+
+            this.followUpState('SELECT_NEXT_MOVE').ask(speech);
+            this.$googleAction.showSuggestionChips(['Related ⏬', 'Next ⏩']);
 
         }
-
 
     },
 
     ON_SIGN_IN() {
         if (this.$googleAction.getSignInStatus() === 'CANCELLED') {
-            this.tell('Please sign in.');
+            this.tell("Sorry, you'll need to sign in to use the app.");
         } else if (this.$googleAction.getSignInStatus() === 'OK') {
 
             const token = this.$request.originalDetectIntentRequest.payload.user.idToken;
@@ -167,24 +175,50 @@ app.setHandler({
         } else if (this.$googleAction.getSignInStatus() === 'ERROR') {
 
             //todo: message + try again state
-            this.tell('There was an error signing in. Please try');
+            this.tell('There was an error signing in. Please try again.');
         }
     },
 
+    SELECT_NEXT_MOVE: {
 
-    ON_ELEMENT_SELECTED() {
-        /**
-         * Called after user selects an element in a card, gets the selected item id (article INDEX)
-         *
-         */
+        async ExplainableRelatedArticlesIntent() {
+            /**
+             * Allows user to browse and select from list of related articles. However relations are explainable
+             * @type {any}
+             */
 
-        this.$user.$data.selectedArticleIndex = parseInt(this.getSelectedElementId());
+            //TODO: temporary next article, with coming soon message
+            this.$user.$data.isRelated = true;
 
-        return this.toIntent('ArticleInfoIntent');
+            //Go back to first article
+            if (this.$user.$data.articles.length - 1 === this.$user.$data.selectedArticleIndex) {
+                this.$user.$data.selectedArticleIndex = 0
+            } else {
+                this.$user.$data.selectedArticleIndex += 1
+            }
+
+            return this.toIntent('ArticleInfoIntent');
+
+
+        },
+
+        NextStory() {
+            /**
+             * Adjusts selected index and redirects to article info
+             */
+
+            //Go back to first article
+            if (this.$user.$data.articles.length - 1 === this.$user.$data.selectedArticleIndex) {
+                this.$user.$data.selectedArticleIndex = 0
+            } else {
+                this.$user.$data.selectedArticleIndex += 1
+            }
+
+            return this.toIntent('ArticleInfoIntent');
+
+        }
+
     },
-
-
-    ORDINAL_SELECTION_STATE,
 
     HelpIntent() {
 
@@ -247,11 +281,11 @@ app.hook('request', (error, host, jovo) => {
 
     try {
         const familyName = host.$request.originalDetectIntentRequest.payload.user.profile.familyName;
-        if(familyName === 'Crawler') {
+        if (familyName === 'Crawler') {
             host.$request.originalDetectIntentRequest.payload.user.userId = 'Health_Check_User';
         }
     }
-    catch(error) {
+    catch (error) {
 
     }
 

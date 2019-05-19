@@ -27,4 +27,12 @@ module.exports = {
         this.$user.$data.selectedArticleIndex = 5;
         return this.toIntent('ArticleInfoIntent');
     }
+    // Unhandled() {
+    //     /**
+    //      * Fallback intent. If the user did not use ordinal selection, repromt and try again.
+    //      */
+    //
+    //     this.followUpState('ORDINAL_SELECTION_STATE').ask(this.t('ordinal.selection.reprompt'));
+    //
+    // },
 };
