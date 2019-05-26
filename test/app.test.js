@@ -185,40 +185,40 @@ describe(`Testing Google Assistant Integration`, () => {
      * Turn off Email sending function when running this test
      * @type {Conversation}
      */
-    test('Email article intent', async () => {
-
-
-        const conversation = testSuite.conversation({locale: 'keys-only'});
-        conversation.$user.$data.selectedArticleIndex = 2;
-        conversation.$user.$data.articles = testArticles;
-
-        let IntentRequest = await testSuite.requestBuilder.intent('ArticleInfoIntent');
-        await conversation.send(IntentRequest);
-
-        conversation.$user.$data.accountData = {
-            "given_name": "Marko",
-            "email": "mrk.arezina@gmail.com"
-        };
-
-        //Test send email
-        IntentRequest = await testSuite.requestBuilder.intent('EmailArticleLinkIntent');
-        const responseIntentRequest = await conversation.send(IntentRequest);
-        expect(
-            responseIntentRequest.getSpeech()
-        ).toContain('email.sent.confirmation');
-
-
-        IntentRequest = await testSuite.requestBuilder.intent('NextStory');
-        await conversation.send(IntentRequest);
-
-        //Expect one increase
-        expect(
-            conversation.$user.$data.selectedArticleIndex
-        ).toBe(3);
-
-        await conversation.clearDb();
-
-    });
+    // test('Email article intent', async () => {
+    //
+    //
+    //     const conversation = testSuite.conversation({locale: 'keys-only'});
+    //     conversation.$user.$data.selectedArticleIndex = 2;
+    //     conversation.$user.$data.articles = testArticles;
+    //
+    //     let IntentRequest = await testSuite.requestBuilder.intent('ArticleInfoIntent');
+    //     await conversation.send(IntentRequest);
+    //
+    //     conversation.$user.$data.accountData = {
+    //         "given_name": "Marko",
+    //         "email": "mrk.arezina@gmail.com"
+    //     };
+    //
+    //     //Test send email
+    //     IntentRequest = await testSuite.requestBuilder.intent('EmailArticleLinkIntent');
+    //     const responseIntentRequest = await conversation.send(IntentRequest);
+    //     expect(
+    //         responseIntentRequest.getSpeech()
+    //     ).toContain('email.sent.confirmation');
+    //
+    //
+    //     IntentRequest = await testSuite.requestBuilder.intent('NextStory');
+    //     await conversation.send(IntentRequest);
+    //
+    //     //Expect one increase
+    //     expect(
+    //         conversation.$user.$data.selectedArticleIndex
+    //     ).toBe(3);
+    //
+    //     await conversation.clearDb();
+    //
+    // });
 
     test('Next article intent', async () => {
 

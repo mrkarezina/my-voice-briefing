@@ -2,6 +2,50 @@
   "invocation": "health news",
   "intents": [
     {
+      "name": "GoogleAssistantStoriesIntent",
+      "phrases": [
+        "google assistant",
+        "stories about google assistant",
+        "google assistant news"
+        ]
+    },
+    {
+      "name": "AlexaStoriesIntent",
+      "phrases": [
+        "alexa",
+        "stories about alexa",
+        "alexa news"
+      ]
+    },
+    {
+      "name": "RainAgencyStoriesIntent",
+      "phrases": [
+        "rain agency",
+        "stories from rain agency",
+        "rain agency news",
+        "rain stories"
+      ]
+    },
+    {
+      "name": "GoogleAssistantStoriesIntent",
+      "phrases": [
+        "google assistant",
+        "stories about google assistant",
+        "google assistant news"
+      ]
+    },
+    {
+      "name": "ListOfTopicsIntent",
+      "phrases": [
+        "topics",
+        "categories",
+        "show me topics",
+        "give me categories",
+        "all topics",
+        "topics list"
+      ]
+    },
+    {
       "name": "FirstStoryIntent",
       "phrases": [
         "first story",

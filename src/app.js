@@ -44,7 +44,6 @@ app.setHandler({
         return this.toIntent('InitialContentIntent');
     },
 
-
     async InitialContentIntent() {
         /**
          * Used to give a list of headline choices to user
@@ -52,6 +51,8 @@ app.setHandler({
          */
 
         this.$user.$data.articles = await getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ce8ca538a93f8f6148b4567.xml');
+
+        console.log('Article Data', this.$user.$data.articles);
 
         let speech = '';
         let written = '';
@@ -108,17 +109,17 @@ app.setHandler({
 
         speech += `${this.t('summary.intro')} ${article['title']} <break time="0.5s"/>`;
 
-        //First n scentences
-        speech += article['summary'].split('. ').slice(0,3).join('. ');
-        speech += `<break time="0.7s"/> ${this.t('see.related')}`;
+        //Don't repeat title in summary
+        speech += article['summary'].replace(article['title'], ' ');
+        speech += `<break time="0.7s"/> ${this.t('next.move')}`;
 
         const basicCard = ArticleInfoCardBuilder(article);
         this.$googleAction.showBasicCard(basicCard);
-        this.$googleAction.showSuggestionChips(['Related ⏬', 'Next ⏩']);
+        this.$googleAction.showSuggestionChips(['Next ⏩', 'Topics ']);
 
 
         //Ask which category instead of related
-        this.followUpState('SELECT_NEXT_MOVE').displayText(this.t('see.related.written').toString()).ask(speech);
+        this.followUpState('SELECT_NEXT_MOVE').displayText(this.t('next.move.written').toString()).ask(speech);
     },
 
     EmailArticleLinkIntent() {
@@ -140,7 +141,7 @@ app.setHandler({
             sendArticleLinkEmail(article, given_name, email);
 
             let speech = this.t('email.sent.confirmation').toString().replace("TITLE", article["title"])
-            speech += this.t('see.related');
+            speech += this.t('next.move');
 
             this.$googleAction.showSuggestionChips(['Related ⏬', 'Next ⏩']);
             this.followUpState('SELECT_NEXT_MOVE').ask(speech);
@@ -164,27 +165,75 @@ app.setHandler({
         }
     },
 
+
+
+    ListOfTopicsIntent() {
+
+        this.$googleAction.showSuggestionChips(['Google Assistant', 'Alexa', 'RAIN Agency']);
+        this.displayText('Which topic?').ask(this.t('possible.topics'));
+
+    },
+    async GoogleAssistantStoriesIntent() {
+        this.$user.$data.articles = await getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ceabe268a93f8f85a8b4567.xml');
+
+        let speech = this.t('Here are the latest Google Assistant stories.');
+        speech += ssmlTitlesBuilder(this.$user.$data.articles);
+        speech += `<break time="1.2s"/> ${this.t('which.article')}`;
+
+        const articleList = ArticleHeadlineListBuilder(this.$user.$data.articles);
+
+        this.$googleAction.showList(articleList);
+
+        let written = this.t('which.article');
+
+        //So Unhandled() can deal with users who don't use ordinal selection
+        this.$user.$data.isOrdinalSelection = true;
+
+        //Need to convert to string or displayText will not work
+        this.followUpState('ORDINAL_SELECTION_STATE').displayText(written.toString()).ask(speech)
+    },
+    async AlexaStoriesIntent() {
+        this.$user.$data.articles = await getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ceabe6c8a93f80c5b8b4567.xml');
+
+        let speech = this.t('Here are the latest Alexa stories.');
+        speech += ssmlTitlesBuilder(this.$user.$data.articles);
+        speech += `<break time="1.2s"/> ${this.t('which.article')}`;
+
+        const articleList = ArticleHeadlineListBuilder(this.$user.$data.articles);
+
+        this.$googleAction.showList(articleList);
+
+        let written = this.t('which.article');
+
+        //So Unhandled() can deal with users who don't use ordinal selection
+        this.$user.$data.isOrdinalSelection = true;
+
+        //Need to convert to string or displayText will not work
+        this.followUpState('ORDINAL_SELECTION_STATE').displayText(written.toString()).ask(speech)
+    },
+    async RainAgencyStoriesIntent() {
+        this.$user.$data.articles = await getInitialContent('https://us12.campaign-archive.com/feed?u=4d28858ff8aaf5bba521824ba&id=f42d838542');
+
+        let speech = this.t('Here are the latest stories from RAIN Agency.');
+        speech += ssmlTitlesBuilder(this.$user.$data.articles);
+        speech += `<break time="1.2s"/> ${this.t('which.article')}`;
+
+        const articleList = ArticleHeadlineListBuilder(this.$user.$data.articles);
+
+        this.$googleAction.showList(articleList);
+
+        let written = this.t('which.article');
+
+        //So Unhandled() can deal with users who don't use ordinal selection
+        this.$user.$data.isOrdinalSelection = true;
+
+        //Need to convert to string or displayText will not work
+        this.followUpState('ORDINAL_SELECTION_STATE').displayText(written.toString()).ask(speech)
+    },
+
+
+
     SELECT_NEXT_MOVE: {
-
-        async ExplainableRelatedArticlesIntent() {
-            /**
-             * Allows user to browse and select from list of related articles. However relations are explainable
-             * @type {any}
-             */
-
-            //TODO: would you like to explore __diff__ category
-
-            //Go back to first article
-            if (this.$user.$data.articles.length - 1 === this.$user.$data.selectedArticleIndex) {
-                this.$user.$data.selectedArticleIndex = 0
-            } else {
-                this.$user.$data.selectedArticleIndex += 1
-            }
-
-            return this.toIntent('ArticleInfoIntent');
-
-
-        },
 
         NextStory() {
             /**
