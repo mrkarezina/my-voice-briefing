@@ -44,6 +44,19 @@
       ]
     },
     {
+      "name": "EmailArticleLinkIntent",
+      "phrases": [
+        "Send me the link",
+        "Email me the link",
+        "Send me the article",
+        "Email story",
+        "Send me link",
+        "Email me article",
+        "Email article",
+        "Save the link"
+      ]
+    },
+    {
       "name": "ExplainableRelatedArticlesIntent",
       "phrases": [
         "related articles",

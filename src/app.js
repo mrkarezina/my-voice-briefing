@@ -34,22 +34,24 @@ app.use(
 app.setHandler({
     LAUNCH() {
 
-        this.$user.$data.articles = getInitialContent();
         this.$user.$data.selectedArticleIndex = 0;
+
         this.$user.$data.isWelcome = true;
+        this.$user.$data.isHelp = false;
+        this.$user.$data.isOrdinalSelection = false;
+        this.$user.$data.askToSendEmailReminder = true;
 
         return this.toIntent('InitialContentIntent');
     },
 
 
-    InitialContentIntent() {
+    async InitialContentIntent() {
         /**
          * Used to give a list of headline choices to user
          * @type {string}
          */
 
-        //Reset articles to headlines
-        this.$user.$data.articles = getInitialContent();
+        this.$user.$data.articles = await getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ce8ca538a93f8f6148b4567.xml');
 
         let speech = '';
         let written = '';
@@ -57,7 +59,8 @@ app.setHandler({
         if (this.$user.$data.isWelcome) {
             //Add welcome message if just launched
 
-            speech += this.t('welcome');
+            const date = new Date().toLocaleDateString();
+            speech += this.t('welcome').toString().replace('DATE', date) + ' and ';
             written += this.t('welcome.written') + ' ';
 
             this.$user.$data.isWelcome = false;
@@ -67,20 +70,23 @@ app.setHandler({
             //This acts as the help menu, since HelpIntent is a redirect
 
             speech += `${this.t('help.menu')} <break time="0.5s"/>`;
-            written += this.t('help.menu.written') + ' ';
+            written += this.t('help.menu.written');
 
             this.$user.$data.isHelp = false
         }
 
         speech += this.t('initial.articles');
         speech += ssmlTitlesBuilder(this.$user.$data.articles);
-        speech += `<break time="0.5s"/> ${this.t('which.article')}`;
+        speech += `<break time="1.2s"/> ${this.t('which.article')}`;
 
         const articleList = ArticleHeadlineListBuilder(this.$user.$data.articles);
 
         this.$googleAction.showList(articleList);
 
         written += this.t('which.article');
+
+        //So Unhandled() can deal with users who don't use ordinal selection
+        this.$user.$data.isOrdinalSelection = true;
 
         //Need to convert to string or displayText will not work
         this.followUpState('ORDINAL_SELECTION_STATE').displayText(written.toString()).ask(speech)
@@ -92,36 +98,30 @@ app.setHandler({
         const selectedArticleIndex = this.$user.$data.selectedArticleIndex;
         const article = this.$user.$data.articles[selectedArticleIndex];
 
-        let speech = `${this.t('snippet.intro')} ${article['title']} <break time="0.5s"/>`;
-        speech += article['summary'];
-        speech += `<break time="0.7s"/> ${this.t('email.link')}`;
+        let speech = ``;
+
+        //A reminder for user to ask for email
+        if(this.$user.$data.askToSendEmailReminder) {
+            speech += this.t('ask.to.send.reminder') + ' ';
+            this.$user.$data.askToSendEmailReminder = false
+        }
+
+        speech += `${this.t('summary.intro')} ${article['title']} <break time="0.5s"/>`;
+
+        //First n scentences
+        speech += article['summary'].split('. ').slice(0,3).join('. ');
+        speech += `<break time="0.7s"/> ${this.t('see.related')}`;
 
         const basicCard = ArticleInfoCardBuilder(article);
         this.$googleAction.showBasicCard(basicCard);
-        this.$googleAction.showSuggestionChips(['Yes ✉️', 'No']);
+        this.$googleAction.showSuggestionChips(['Related ⏬', 'Next ⏩']);
 
-        //TODO: need to sign in for email message
-        this.followUpState('EMAIL_STORY_LINK_CHOICE').displayText(this.t('email.link.written').toString()).ask(speech);
+
+        //Ask which category instead of related
+        this.followUpState('SELECT_NEXT_MOVE').displayText(this.t('see.related.written').toString()).ask(speech);
     },
 
-    EMAIL_STORY_LINK_CHOICE: {
-        /**
-         * Yes no in context of: would you like to get an email with full article?
-         * @returns {Promise<*>|Promise<void>}
-         * @constructor
-         */
-
-        YesIntent() {
-            return this.toIntent('EmailStoryIntent');
-        },
-
-        NoIntent() {
-            this.followUpState('SELECT_NEXT_MOVE').ask(this.t('related.or.next'))
-            this.$googleAction.showSuggestionChips(['Related ⏬', 'Next ⏩']);
-        },
-    },
-
-    EmailStoryIntent() {
+    EmailArticleLinkIntent() {
 
         const userData = this.$user.$data.accountData;
 
@@ -139,30 +139,28 @@ app.setHandler({
 
             sendArticleLinkEmail(article, given_name, email);
 
-            let speech = this.t('email.sent.confirmation');
-            speech += this.t('related.or.next');
+            let speech = this.t('email.sent.confirmation').toString().replace("TITLE", article["title"])
+            speech += this.t('see.related');
 
-            this.followUpState('SELECT_NEXT_MOVE').ask(speech);
             this.$googleAction.showSuggestionChips(['Related ⏬', 'Next ⏩']);
-
+            this.followUpState('SELECT_NEXT_MOVE').ask(speech);
         }
-
     },
 
     ON_SIGN_IN() {
         if (this.$googleAction.getSignInStatus() === 'CANCELLED') {
-            this.tell("Sorry, you'll need to sign in to use the app.");
+            this.tell("Sorry, you'll need to sign in for me to send get your email to send the the link.");
         } else if (this.$googleAction.getSignInStatus() === 'OK') {
 
             const token = this.$request.originalDetectIntentRequest.payload.user.idToken;
             this.$user.$data.accountData = jwt.decode(token);
 
-            this.toIntent('EmailStoryIntent')
+            this.toIntent('EmailArticleLinkIntent')
 
         } else if (this.$googleAction.getSignInStatus() === 'ERROR') {
 
             //todo: message + try again state
-            this.tell('There was an error signing in. Please try again.');
+            this.tell('Sorry, there was an error signing in. Please try again.');
         }
     },
 
@@ -174,8 +172,7 @@ app.setHandler({
              * @type {any}
              */
 
-            //TODO: temporary next article, with coming soon message
-            this.$user.$data.isRelated = true;
+            //TODO: would you like to explore __diff__ category
 
             //Go back to first article
             if (this.$user.$data.articles.length - 1 === this.$user.$data.selectedArticleIndex) {
@@ -212,11 +209,12 @@ app.setHandler({
          * Called after user selects an element in a card, gets the selected item id (article INDEX)
          *
          */
-
+        this.$user.$data.isOrdinalSelection = false;
         this.$user.$data.selectedArticleIndex = parseInt(this.getSelectedElementId());
 
         return this.toIntent('ArticleInfoIntent');
     },
+
 
     ORDINAL_SELECTION_STATE,
 
@@ -263,6 +261,13 @@ app.setHandler({
         /**
          * Fallback intent. Redirect user to last intent.
          */
+
+        //If user did not say ordinal, reprompt
+        if (this.$user.$data.isOrdinalSelection) {
+
+            this.$user.$data.isOrdinalSelection = false;
+            return this.followUpState('ORDINAL_SELECTION_STATE').ask(this.t('ordinal.selection.reprompt'));
+        }
 
         //Generate Sorry message
         this.$speech.addText(["I had trouble understanding.", "I’m sorry. I’m having some trouble understanding what you said.", "I didn’t quite get that."]).addText(this.t('unhandled.question'));
