@@ -9,7 +9,7 @@ describe(`Testing Google Assistant Integration`, () => {
 
     const testSuite = new GoogleAssistant().makeTestSuite();
 
-    test('Launch intent should contain welcome key', async () => {
+    test('Launch intent', async () => {
 
         const conversation = testSuite.conversation({locale: 'keys-only'});
 
@@ -21,31 +21,26 @@ describe(`Testing Google Assistant Integration`, () => {
         ).toContain('welcome');
 
         expect(
-            conversation.$user.$data.articles.length
-        ).toBeGreaterThan(1);
-
-        expect(
-            conversation.$user.$data.selectedArticleIndex
-        ).toBe(0);
+            responseLaunchRequest.getSpeech()
+        ).toContain('initial.topic');
 
         await conversation.clearDb();
 
     });
 
-    test('Headlines list (InitialContentIntent)', async () => {
+    test('Headlines list (Google Assistant)', async () => {
 
         const conversation = testSuite.conversation({locale: 'keys-only'});
 
         //To get the article data set up
-        const launchRequest = await testSuite.requestBuilder.launch();
-        const responseLaunchRequest = await conversation.send(launchRequest);
+        let launchRequest = await testSuite.requestBuilder.launch();
+        await conversation.send(launchRequest);
 
-        const IntentRequest = await testSuite.requestBuilder.intent('InitialContentIntent');
-        const responseIntentRequest = await conversation.send(IntentRequest);
+        let IntentRequest = await testSuite.requestBuilder.intent('InitialContentIntent');
+        let responseIntentRequest = await conversation.send(IntentRequest);
 
-        expect(
-            responseIntentRequest.getSpeech()
-        ).toContain('initial.articles');
+        IntentRequest = await testSuite.requestBuilder.intent('GoogleAssistantStoriesIntent');
+        responseIntentRequest = await conversation.send(IntentRequest);
 
         expect(
             responseIntentRequest.getSpeech()
@@ -74,6 +69,9 @@ describe(`Testing Google Assistant Integration`, () => {
         await conversation.send(launchRequest);
 
         let IntentRequest = await testSuite.requestBuilder.intent('InitialContentIntent');
+        await conversation.send(IntentRequest);
+
+        IntentRequest = await testSuite.requestBuilder.intent('GoogleAssistantStoriesIntent');
         await conversation.send(IntentRequest);
 
         IntentRequest = await testSuite.requestBuilder.intent('ThirdIntent');
@@ -110,6 +108,9 @@ describe(`Testing Google Assistant Integration`, () => {
         let IntentRequest = await testSuite.requestBuilder.intent('InitialContentIntent');
         await conversation.send(IntentRequest);
 
+        IntentRequest = await testSuite.requestBuilder.intent('GoogleAssistantStoriesIntent');
+        await conversation.send(IntentRequest);
+
         IntentRequest = await testSuite.requestBuilder.intent('Unhandled');
         let responseIntentRequest = await conversation.send(IntentRequest);
 
@@ -140,42 +141,25 @@ describe(`Testing Google Assistant Integration`, () => {
 
     });
 
-
-    test('On selecting title, test Article Info Intent', async () => {
-
-        const conversation = testSuite.conversation({locale: 'keys-only'});
-        conversation.$user.$data.selectedArticleIndex = 1;
-        conversation.$user.$data.articles = testArticles;
-
-        const IntentRequest = await testSuite.requestBuilder.intent('ArticleInfoIntent');
-        const responseIntentRequest = await conversation.send(IntentRequest);
-
-        //See that speech regarding Article card is good
-        expect(
-            responseIntentRequest.getSpeech()
-        ).toMatch(`summary.intro Frozen treats: Navigating the options 2 <break time="0.5s"/>When it’s my<break time="0.7s"/> see.related`);
-
-
-        await conversation.clearDb();
-
-    });
-
     test('Test Article Info Intent, by using Launch intent instead of presenting', async () => {
 
         //Articles should now be set
         const conversation = testSuite.conversation({locale: 'keys-only'});
-        const launchRequest = await testSuite.requestBuilder.launch();
-        const responseLaunchRequest = await conversation.send(launchRequest);
+        let IntentRequest = await testSuite.requestBuilder.launch();
+        let responseIntentRequest = await conversation.send(IntentRequest);
+
+        IntentRequest = await testSuite.requestBuilder.intent('GoogleAssistantStoriesIntent');
+        responseIntentRequest = await conversation.send(IntentRequest);
 
         conversation.$user.$data.selectedArticleIndex = 1;
 
-        const IntentRequest = await testSuite.requestBuilder.intent('ArticleInfoIntent');
-        const responseIntentRequest = await conversation.send(IntentRequest);
+        IntentRequest = await testSuite.requestBuilder.intent('ArticleInfoIntent');
+        responseIntentRequest = await conversation.send(IntentRequest);
 
         //See that speech regarding Article card contains CMS text
         expect(
             responseIntentRequest.getSpeech()
-        ).toContain('see.related');
+        ).toContain('next.move');
 
         await conversation.clearDb();
 
