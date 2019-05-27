@@ -34,11 +34,11 @@ app.use(
 app.setHandler({
     LAUNCH() {
 
-        //Load articles into cache
+        //Loads articles into api cache
         getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ce8ca538a93f8f6148b4567.xml');
         getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ceabe268a93f8f85a8b4567.xml');
         getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ceabe6c8a93f80c5b8b4567.xml');
-        getInitialContent('https://us12.campaign-archive.com/feed?u=4d28858ff8aaf5bba521824ba&id=f42d838542');
+        getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ceb1b448a93f837758b4567.xml');
 
         this.$user.$data.isWelcome = true;
         this.$user.$data.isHelp = false;
@@ -91,7 +91,7 @@ app.setHandler({
         let speech = ``;
 
         //A reminder for user to ask for email
-        if(this.$user.$data.askToSendEmailReminder) {
+        if (this.$user.$data.askToSendEmailReminder) {
             speech += this.t('ask.to.send.reminder') + ' ';
             this.$user.$data.askToSendEmailReminder = false
         }
@@ -104,10 +104,8 @@ app.setHandler({
 
         const basicCard = ArticleInfoCardBuilder(article);
         this.$googleAction.showBasicCard(basicCard);
-        this.$googleAction.showSuggestionChips(['Next ⏩', 'Topics ']);
+        this.$googleAction.showSuggestionChips(['Next ⏩', 'Topics', 'Email Link']);
 
-
-        //Ask which category instead of related
         this.followUpState('SELECT_NEXT_MOVE').displayText(this.t('next.move.written').toString()).ask(speech);
     },
 
@@ -129,10 +127,10 @@ app.setHandler({
 
             sendArticleLinkEmail(article, given_name, email);
 
-            let speech = this.t('email.sent.confirmation').toString().replace("TITLE", article["title"])
+            let speech = this.t('email.sent.confirmation').toString().replace("TITLE", article["title"]) + ' '
             speech += this.t('next.move');
 
-            this.$googleAction.showSuggestionChips(['Related ⏬', 'Next ⏩']);
+            this.$googleAction.showSuggestionChips(['Next ⏩', 'Topics']);
             this.followUpState('SELECT_NEXT_MOVE').ask(speech);
         }
     },
@@ -157,11 +155,10 @@ app.setHandler({
 
     ListOfTopicsIntent() {
 
-        this.$googleAction.showSuggestionChips(['Google Assistant', 'Alexa', 'RAIN Agency']);
+        this.$googleAction.showSuggestionChips(['Google Assistant', 'Alexa', 'Voicebot.ai', 'Voice Summit']);
         this.displayText('Which topic?').ask(this.t('possible.topics'));
 
     },
-
     async GoogleAssistantStoriesIntent() {
         this.$user.$data.articles = await getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ceabe268a93f8f85a8b4567.xml');
 
@@ -200,10 +197,10 @@ app.setHandler({
         //Need to convert to string or displayText will not work
         this.followUpState('ORDINAL_SELECTION_STATE').displayText(written.toString()).ask(speech)
     },
-    async RainAgencyStoriesIntent() {
-        this.$user.$data.articles = await getInitialContent('https://us12.campaign-archive.com/feed?u=4d28858ff8aaf5bba521824ba&id=f42d838542');
+    async VoiceBotStoriesIntent() {
+        this.$user.$data.articles = await getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ce8ca538a93f8f6148b4567.xml');
 
-        let speech = this.t('Here are the latest stories from RAIN Agency.');
+        let speech = this.t('Here are the latest stories from Voicebot.ai.');
         speech += ssmlTitlesBuilder(this.$user.$data.articles);
         speech += `<break time="1.2s"/> ${this.t('which.article')}`;
 
@@ -219,7 +216,25 @@ app.setHandler({
         //Need to convert to string or displayText will not work
         this.followUpState('ORDINAL_SELECTION_STATE').displayText(written.toString()).ask(speech)
     },
+    async VoiceSummitStoriesIntent() {
+        this.$user.$data.articles = await getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ceb1b448a93f837758b4567.xml');
 
+        let speech = this.t('Here are the latest stories from the Voice Summit blog.');
+        speech += ssmlTitlesBuilder(this.$user.$data.articles);
+        speech += `<break time="1.2s"/> ${this.t('which.article')}`;
+
+        const articleList = ArticleHeadlineListBuilder(this.$user.$data.articles);
+
+        this.$googleAction.showList(articleList);
+
+        let written = this.t('which.article');
+
+        //So Unhandled() can deal with users who don't use ordinal selection
+        this.$user.$data.isOrdinalSelection = true;
+
+        //Need to convert to string or displayText will not work
+        this.followUpState('ORDINAL_SELECTION_STATE').displayText(written.toString()).ask(speech)
+    },
 
 
     SELECT_NEXT_MOVE: {

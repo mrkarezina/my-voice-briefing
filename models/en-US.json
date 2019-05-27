@@ -1,5 +1,5 @@
 {
-  "invocation": "health news",
+  "invocation": "my voice briefing",
   "intents": [
     {
       "name": "GoogleAssistantStoriesIntent",
@@ -10,6 +10,14 @@
         ]
     },
     {
+      "name": "GoogleAssistantStoriesIntent",
+      "phrases": [
+        "google assistant",
+        "stories about google assistant",
+        "google assistant news"
+      ]
+    },
+    {
       "name": "AlexaStoriesIntent",
       "phrases": [
         "alexa",
@@ -18,20 +26,23 @@
       ]
     },
     {
-      "name": "RainAgencyStoriesIntent",
+      "name": "VoiceBotStoriesIntent",
       "phrases": [
-        "rain agency",
-        "stories from rain agency",
-        "rain agency news",
-        "rain stories"
+        "voice bot",
+        "voice bot.ai",
+        "stories from voicebot.ai",
+        "voicebot.ai news",
+        "voicebot.ai stories"
       ]
     },
     {
-      "name": "GoogleAssistantStoriesIntent",
+      "name": "VoiceSummitStoriesIntent",
       "phrases": [
-        "google assistant",
-        "stories about google assistant",
-        "google assistant news"
+        "voice summit",
+        "the voice summit blog",
+        "stories from voice summit",
+        "voice summit news",
+        "voice summit stories"
       ]
     },
     {
@@ -43,18 +54,6 @@
         "give me categories",
         "all topics",
         "topics list"
-      ]
-    },
-    {
-      "name": "FirstStoryIntent",
-      "phrases": [
-        "first story",
-        "First Story 📰",
-        "1st",
-        "first article",
-        "give me my first story",
-        "home",
-        "first"
       ]
     },
     {
@@ -75,16 +74,13 @@
         "trending articles",
         "see trending articles",
         "show me headlines",
-        "full headlines",
         "top headlines",
         "latest headlines",
         "latest stories",
-        "show me stories",
         "trending stories",
         "headlines",
         "go home",
-        "latest stories",
-        "Headlines 🔥"
+        "latest stories"
       ]
     },
     {
@@ -94,23 +90,11 @@
         "Email me the link",
         "Send me the article",
         "Email story",
+        "Email Link",
         "Send me link",
         "Email me article",
         "Email article",
         "Save the link"
-      ]
-    },
-    {
-      "name": "ExplainableRelatedArticlesIntent",
-      "phrases": [
-        "related articles",
-        "see related articles",
-        "show me related headlines",
-        "related headlines",
-        "show me related stories",
-        "related stories",
-        "related",
-        "Related ⏬"
       ]
     },
     {
