@@ -6,37 +6,49 @@
       "phrases": [
         "google assistant",
         "what's going on with google assistant",
+        "what's the latest on the google assistant",
         "stories about google assistant",
         "google assistant news"
-        ]
+      ]
     },
     {
       "name": "AlexaStoriesIntent",
       "phrases": [
         "alexa",
         "what's going on with alexa",
+        "what's the latest on alexa",
         "stories about alexa",
         "alexa news"
       ]
     },
     {
-      "name": "VoiceBotStoriesIntent",
+      "name": "SiriStoriesIntent",
       "phrases": [
-        "voice bot",
-        "voice bot.ai",
-        "stories from voicebot.ai",
-        "voicebot.ai news",
-        "voicebot.ai stories"
+        "Siri",
+        "what's going on with Siri",
+        "what's the latest on Siri",
+        "stories about Siri",
+        "Siri news"
       ]
     },
     {
-      "name": "VoiceSummitStoriesIntent",
+      "name": "CortanaStoriesIntent",
       "phrases": [
-        "voice summit",
-        "the voice summit blog",
-        "stories from voice summit",
-        "voice summit news",
-        "voice summit stories"
+        "Cortana",
+        "what's going on with Cortana",
+        "what's the latest on Cortana",
+        "stories about Cortana",
+        "Cortana news"
+      ]
+    },
+    {
+      "name": "BixbyStoriesIntent",
+      "phrases": [
+        "Bixby",
+        "what's going on with Bixby",
+        "what's the latest on Bixby",
+        "stories about Bixby",
+        "Bixby news"
       ]
     },
     {

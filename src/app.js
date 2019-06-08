@@ -37,10 +37,11 @@ app.setHandler({
     LAUNCH() {
 
         //Loads articles into api cache
-        getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ce8ca538a93f8f6148b4567.xml');
         getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ceabe268a93f8f85a8b4567.xml');
         getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ceabe6c8a93f80c5b8b4567.xml');
-        getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675ceb1b448a93f837758b4567.xml');
+        getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675cfbc03d8a93f8e25d8b4567.xml');
+        getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675cfbc0b98a93f898628b4567.xml');
+        getInitialContent('http://fetchrss.com/rss/5ce8c95d8a93f8d5098b45675cfbc0f38a93f866668b4567.xml');
 
         this.$user.$data.isWelcome = true;
         this.$user.$data.isHelp = false;
@@ -80,7 +81,7 @@ app.setHandler({
 
         speech += this.t('initial.topic');
 
-        this.$googleAction.showSuggestionChips(['Google Assistant ', 'Alexa']);
+        this.$googleAction.showSuggestionChips(['Google Assistant', 'Alexa', 'Siri', 'Cortana', 'Bixby']);
         this.displayText(written.toString()).ask(speech)
     },
 
@@ -129,7 +130,7 @@ app.setHandler({
 
             sendArticleLinkEmail(article, given_name, email);
 
-            let speech = this.t('email.sent.confirmation').toString().replace("TITLE", article["title"]) + ' '
+            let speech = this.t('email.sent.confirmation').toString().replace("TITLE", article["title"]) + ' ';
             speech += this.t('next.move');
 
             this.$googleAction.showSuggestionChips(['Next ⏩', 'Topics']);
@@ -139,7 +140,9 @@ app.setHandler({
 
     ON_SIGN_IN() {
         if (this.$googleAction.getSignInStatus() === 'CANCELLED') {
-            this.tell("Sorry, you'll need to sign in for me to send get your email to send the the link.");
+
+            this.followUpState('TRY_AGAIN').ask(this.t('acountlink.canceled'));
+
         } else if (this.$googleAction.getSignInStatus() === 'OK') {
 
             const token = this.$request.originalDetectIntentRequest.payload.user.idToken;
@@ -149,15 +152,14 @@ app.setHandler({
 
         } else if (this.$googleAction.getSignInStatus() === 'ERROR') {
 
-            //todo: message + try again state
-            this.tell('Sorry, there was an error signing in. Please try again.');
+            this.followUpState('TRY_AGAIN').ask(this.t('acountlink.error'));
         }
     },
 
 
     ListOfTopicsIntent() {
 
-        this.$googleAction.showSuggestionChips(['Google Assistant', 'Alexa', 'Voicebot.ai', 'Voice Summit']);
+        this.$googleAction.showSuggestionChips(['Google Assistant', 'Alexa', 'Siri', 'Cortana', 'Bixby']);
         this.displayText('Which topic?').ask(this.t('possible.topics'));
 
     },
