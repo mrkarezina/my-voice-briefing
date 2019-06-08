@@ -5,22 +5,16 @@
       "name": "GoogleAssistantStoriesIntent",
       "phrases": [
         "google assistant",
+        "what's going on with google assistant",
         "stories about google assistant",
         "google assistant news"
         ]
     },
     {
-      "name": "GoogleAssistantStoriesIntent",
-      "phrases": [
-        "google assistant",
-        "stories about google assistant",
-        "google assistant news"
-      ]
-    },
-    {
       "name": "AlexaStoriesIntent",
       "phrases": [
         "alexa",
+        "what's going on with alexa",
         "stories about alexa",
         "alexa news"
       ]

@@ -22,10 +22,4 @@ describe(`Testing util functions`, () => {
 
     });
 
-    test('Should get some inital content', async () => {
-
-        expect(getInitialContent().length).toBe(5);
-
-    });
-
 });

@@ -49,7 +49,7 @@ describe(`Testing Google Assistant Integration`, () => {
         //Test for transitions
         expect(
             responseIntentRequest.getSpeech()
-        ).toContain('<say-as interpret-as="ordinal">1</say-as> story');
+        ).toContain('<say-as interpret-as="ordinal">');
 
         // Lists need to have more than one item or Google Error
         expect(

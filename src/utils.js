@@ -11,8 +11,6 @@ exports.getInitialContent = async (urlSelected) => {
      * @type {{uri, json: boolean}}
      */
 
-    console.log('url here' , urlSelected);
-
     const options = {
         method: 'POST',
         uri: WYZEFIND_CORE_API_BASE + '/rss-content',
@@ -120,69 +118,36 @@ exports.ArticleInfoCardBuilder = (article) => {
 };
 
 
-exports.ssmlTitlesBuilder = (articles, explainableRelations = false) => {
+exports.ssmlTitlesBuilder = (articles) => {
     /**
      * Used to build a SSML to present the titles nicley
      *
      */
 
     let speech = [];
-    const possibleTransistions = ["also mentions", "also focuses on", "also talks about"];
+
+    const beginningTransitions = [`Today's <say-as interpret-as="ordinal">1</say-as> story is`, `First up, we've got`];
+    const endTransitions = ["And today's last story is", "And the last story is", "And finally, the last story is"];
 
     for (let i = 0; i < articles.length; i++) {
 
-        const title = articles[i]['title'].replace(' - Harvard Health Blog', ' ')
-
-        if (explainableRelations) {
-            //Add explanation for how article is related
-
-            //Get the label of each concept
-            let commonConcepts = articles[i]["concepts"].slice(0, 3);
-            commonConcepts = commonConcepts.map(function (e) {
-                return e['label']
-            });
-
-            //Case to structure the explanation
-            let explanation = ``
-            switch (commonConcepts.length) {
-                case 0:
-                    explanation = ``;
-                    break;
-                case 1:
-                    explanation = `${randomChoose(possibleTransistions)} ${commonConcepts[0]}`
-                    break;
-                case 2:
-                    explanation = `${randomChoose(possibleTransistions)} ${commonConcepts[0]} and ${commonConcepts[1]}`
-                    break;
-                case 3:
-                    explanation = `${randomChoose(possibleTransistions)} ${commonConcepts[0]}, ${commonConcepts[1]}, and ${commonConcepts[2]}`
-                    break;
-            }
-
-            speech.push(
-                `
-            <break time="0.5s"/>
-            The <say-as interpret-as="ordinal">${i + 1}</say-as> story: <break time="0.4s"/>
-            ${title} ${explanation}
-            `)
-
-        } else {
-
-            //Introduction ie: The __ story, or The last story __
-            let intro = `The <say-as interpret-as="ordinal">${i + 1}</say-as> story is`
-            if(i === 0) {
-                intro = `Today's <say-as interpret-as="ordinal">${i + 1}</say-as> story is`
-            } else if (i === articles.length - 1) {
-                intro = `And today's last story is`
-            }
-
-            speech.push(
-                `
-            <break time="0.5s"/>
-            ${intro}
-            ${title}
-            `)
+        //Introduction ie: The __ story, or The last story __
+        let intro = `The <say-as interpret-as="ordinal">${i + 1}</say-as> story is`
+        if (i === 0) {
+            intro = randomChoose(beginningTransitions)
+        } else if (i === articles.length - 1) {
+            intro = randomChoose(endTransitions)
         }
+
+        speech.push(
+            ` ${intro}
+            <prosody rate="medium">
+                ${articles[i]["title"]}
+                <break time="0.8s"/>
+                ${articles[i]["summary"].split(".")[1]}
+            </prosody>
+            
+            <break time="0.5s"/>`)
     }
 
     return speech.join(" ")

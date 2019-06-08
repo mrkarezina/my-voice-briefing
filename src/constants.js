@@ -3,7 +3,7 @@
 // ------------------------------------------------------------------
 
 
-const NUMBER_OF_ARTICLES = 5;
+const NUMBER_OF_ARTICLES = 3;
 
 const DB_ID = '1';
 const PROCESSOR_ID = 'language-processor-health';
