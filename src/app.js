@@ -118,6 +118,7 @@ app.setHandler({
 
         if (!userData) {
             //If no user data, go through account linking flow
+            this.ask(this.t('account.linking.explanation'));
             return this.showAccountLinkingCard();
 
         } else {
@@ -141,7 +142,11 @@ app.setHandler({
     ON_SIGN_IN() {
         if (this.$googleAction.getSignInStatus() === 'CANCELLED') {
 
-            this.followUpState('TRY_AGAIN').ask(this.t('acountlink.canceled'));
+            let speech = this.t('acountlink.canceled') + ' ';
+            speech += this.t('next.move');
+
+            this.$googleAction.showSuggestionChips(['Next ⏩', 'Topics']);
+            this.followUpState('SELECT_NEXT_MOVE').ask(speech);
 
         } else if (this.$googleAction.getSignInStatus() === 'OK') {
 
@@ -152,7 +157,11 @@ app.setHandler({
 
         } else if (this.$googleAction.getSignInStatus() === 'ERROR') {
 
-            this.followUpState('TRY_AGAIN').ask(this.t('acountlink.error'));
+            let speech = this.t('acountlink.error') + ' ';
+            speech += this.t('next.move');
+
+            this.$googleAction.showSuggestionChips(['Next ⏩', 'Topics']);
+            this.followUpState('SELECT_NEXT_MOVE').ask(speech);
         }
     },
 
