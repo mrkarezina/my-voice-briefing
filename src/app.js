@@ -131,7 +131,7 @@ app.setHandler({
 
             sendArticleLinkEmail(article, given_name, email);
 
-            let speech = this.t('email.sent.confirmation').toString().replace("TITLE", article["title"]) + ' ';
+            let speech = this.t('email.sent.confirmation') + ' ';
             speech += this.t('next.move');
 
             this.$googleAction.showSuggestionChips(['Next ⏩', 'Topics']);

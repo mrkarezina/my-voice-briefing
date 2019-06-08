@@ -142,12 +142,11 @@ exports.ssmlTitlesBuilder = (articles) => {
         speech.push(
             ` ${intro}
             <prosody rate="medium">
-                ${articles[i]["title"]}
-                <break time="0.8s"/>
+                ${articles[i]["title"]} .
                 ${articles[i]["summary"].split(".")[1]}
             </prosody>
             
-            <break time="0.5s"/>`)
+            <break time="0.8s"/>`)
     }
 
     return speech.join(" ")
