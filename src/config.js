@@ -55,7 +55,7 @@ module.exports = {
 
     analytics: {
         DashbotGoogleAssistant: {
-            key: 'i4ncDHS9kjrtHTkaRkyXLtEf6Y1yZAJO51iuM73r\n',
+            key: 'i4ncDHS9kjrtHTkaRkyXLtEf6Y1yZAJO51iuM73r',
         },
     },
 };
