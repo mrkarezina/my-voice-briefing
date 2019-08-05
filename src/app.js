@@ -36,6 +36,8 @@ app.use(
 
 
 app.setHandler({
+    // Order of the intents in app.js seems to matter. Ordinal selection was not working until it was moved back to original position.
+
     LAUNCH() {
 
         //Loads articles into api cache
@@ -66,7 +68,9 @@ app.setHandler({
             //Add welcome message if just launched
 
             const date = new Date().toLocaleDateString();
-            speech += this.t('welcome').toString().replace('DATE', date)
+
+            // Using i18n keys with parameters
+            speech += this.t('welcome.m', {date: date})
             written += this.t('welcome.written') + ' ';
 
             this.$user.$data.isWelcome = false;
