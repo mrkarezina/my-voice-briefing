@@ -6,20 +6,20 @@
 module.exports = {
     logging: true,
 
-    user: {
-        context: {
-            enabled: true,
-            prev: {
-                size: 3,
-                response: {
-                    speech: true,
-                    reprompt: true,
-                    state: true,
-                    output: false,
-                },
-            },
-        },
-    },
+    // user: {
+    //     context: {
+    //         enabled: true,
+    //         prev: {
+    //             size: 3,
+    //             response: {
+    //                 speech: true,
+    //                 reprompt: true,
+    //                 state: true,
+    //                 output: false,
+    //             },
+    //         },
+    //     },
+    // },
 
     intentMap: {
         'AMAZON.StopIntent': 'END',
@@ -51,5 +51,11 @@ module.exports = {
                 }
             ]
         }
+    },
+
+    analytics: {
+        DashbotGoogleAssistant: {
+            key: 'i4ncDHS9kjrtHTkaRkyXLtEf6Y1yZAJO51iuM73r\n',
+        },
     },
 };
