@@ -225,15 +225,15 @@ app.setHandler({
 
         YesIntent() {
             /**
-             * Redirect in context: Would you like to see related?
+             * Redirect in context: See topics
              */
 
-            return this.toIntent(this.$user.$context.prev[1].request.intent);
+            return this.toIntent('ListOfTopicsIntent');
         },
 
         NoIntent() {
             /**
-             * Redirect in context: Would you like to see related?
+             * Redirect in context: See topics
              */
 
             return this.toIntent('HelpIntent');
