@@ -162,6 +162,7 @@ NOTE: The YesIntent is trained to recoginze “go back” as a phrase if the use
 
 
 ## Issues
+- The CMS spreadsheet fulfillment will sometimes stop working. i18n keys will instead result in OBJECT [OBJECT] instead of text. Solve this by renaming the key in the CMS that is not working.
 - RSS links will expire and stop working if not used for over 24h. Currently AoG health checks (every 5 min) make sure the RSS links are constantly used.
 
 

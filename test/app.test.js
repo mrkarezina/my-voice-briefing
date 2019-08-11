@@ -159,7 +159,7 @@ describe(`Testing Google Assistant Integration`, () => {
         //See that speech regarding Article card contains CMS text
         expect(
             responseIntentRequest.getSpeech()
-        ).toContain('next.move');
+        ).toContain('next.moves');
 
         await conversation.clearDb();
 

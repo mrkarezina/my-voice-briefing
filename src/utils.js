@@ -2,7 +2,7 @@ const {List, OptionItem, BasicCard} = require('jovo-platform-googleassistant');
 const requestPromise = require('request-promise-native');
 const sgMail = require('@sendgrid/mail');
 
-const {NUMBER_OF_ARTICLES, DB_ID, PROCESSOR_ID, WYZEFIND_CORE_API_BASE, SENDGRID_API_KEY} = require('./constants');
+const {NUMBER_OF_ARTICLES, DB_ID, PROCESSOR_ID, WYZEFIND_CORE_API_BASE, WYZEFIND_RSS_URL, SENDGRID_API_KEY} = require('./constants');
 
 exports.getInitialContent = async (urlSelected) => {
     /**
@@ -13,7 +13,7 @@ exports.getInitialContent = async (urlSelected) => {
 
     const options = {
         method: 'POST',
-        uri: WYZEFIND_CORE_API_BASE + '/rss-content',
+        uri: WYZEFIND_RSS_URL,
         json: true, // Automatically parses the JSON string in the response
 
         //TODO: can;t have variable
