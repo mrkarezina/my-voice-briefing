@@ -3,6 +3,7 @@
   "main": "index.js",
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
+    "jovo-analytics-chatbase": "^2.2.12",
     "jovo-analytics-dashbot": "^2.2.11",
     "jovo-cms-googlesheets": "^2.2.12",
     "jovo-db-filedb": "^2.2.10",

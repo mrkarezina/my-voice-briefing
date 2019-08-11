@@ -57,5 +57,8 @@ module.exports = {
         DashbotGoogleAssistant: {
             key: 'i4ncDHS9kjrtHTkaRkyXLtEf6Y1yZAJO51iuM73r',
         },
+        ChatbaseGoogleAssistant: {
+            key: '11ccaf9c-e8f4-4314-a59e-ae5ca612c17e'
+        }
     },
 };

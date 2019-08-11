@@ -11,13 +11,15 @@ const {JovoDebugger} = require('jovo-plugin-debugger');
 const {Firestore} = require('jovo-db-firestore');
 const {GoogleSheetsCMS} = require('jovo-cms-googlesheets');
 const {DashbotGoogleAssistant} = require('jovo-analytics-dashbot');
+const { ChatbaseGoogleAssistant } = require('jovo-analytics-chatbase');
+
 
 const jwt = require('jsonwebtoken');
 
 const ORDINAL_SELECTION_STATE = require('./ordinalSelection');
 const NEWS_SOURCES_INTENTS = require('./newsSources');
 
-const {getInitialContent, ArticleInfoCardBuilder, sendArticleLinkEmail} = require('./utils');
+const {ArticleInfoCardBuilder, sendArticleLinkEmail} = require('./utils');
 
 const app = new App();
 
@@ -27,6 +29,7 @@ app.use(
     new JovoDebugger(),
     new Firestore(),
     new GoogleSheetsCMS(),
+    new ChatbaseGoogleAssistant(),
     new DashbotGoogleAssistant()
 );
 
