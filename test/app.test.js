@@ -22,7 +22,7 @@ describe(`Testing Google Assistant Integration`, () => {
 
         expect(
             responseLaunchRequest.getSpeech()
-        ).toContain('initial.topic');
+        ).toContain('initial_topic');
 
         await conversation.clearDb();
 
@@ -44,7 +44,7 @@ describe(`Testing Google Assistant Integration`, () => {
 
         expect(
             responseIntentRequest.getSpeech()
-        ).toContain('which.article');
+        ).toContain('which_article');
 
         //Test for transitions
         expect(
@@ -89,7 +89,7 @@ describe(`Testing Google Assistant Integration`, () => {
         //See that speech regarding Article card is good
         expect(
             responseIntentRequest.getSpeech()
-        ).toContain('summary.intro');
+        ).toContain('summary_intro');
 
 
         await conversation.clearDb();
@@ -117,7 +117,7 @@ describe(`Testing Google Assistant Integration`, () => {
         //See that speech regarding Article card is good
         expect(
             responseIntentRequest.getSpeech()
-        ).toContain('ordinal.selection.reprompt');
+        ).toContain('ordinal_selection_reprompt');
 
         IntentRequest = await testSuite.requestBuilder.intent('ThirdIntent');
         responseIntentRequest = await conversation.send(IntentRequest);
@@ -134,7 +134,7 @@ describe(`Testing Google Assistant Integration`, () => {
         //See that speech regarding Article card is good
         expect(
             responseIntentRequest.getSpeech()
-        ).toContain('summary.intro');
+        ).toContain('summary_intro');
 
 
         await conversation.clearDb();
@@ -159,7 +159,7 @@ describe(`Testing Google Assistant Integration`, () => {
         //See that speech regarding Article card contains CMS text
         expect(
             responseIntentRequest.getSpeech()
-        ).toContain('next.moves');
+        ).toContain('next_moves');
 
         await conversation.clearDb();
 
@@ -225,7 +225,7 @@ describe(`Testing Google Assistant Integration`, () => {
 
     });
 
-    test('Test Help menu. See if help menu turns true, and turns false after', async () => {
+    test('Test help_menu. See if help_menu turns true, and turns false after', async () => {
 
         const conversation = testSuite.conversation({locale: 'keys-only'});
         //Simulate launch
@@ -240,7 +240,7 @@ describe(`Testing Google Assistant Integration`, () => {
         //See that speech regarding Article card contains CMS text
         expect(
             responseIntentRequest.getSpeech()
-        ).toContain('help.menu');
+        ).toContain('help_menu');
 
         //See that speech regarding Article card contains CMS text
         expect(

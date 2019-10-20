@@ -1,0 +1,23 @@
+{
+  "translation": {
+    "welcome": "<prosody pitch=\"\"2st\"\">Hi there!</prosody>  <break time=\"\"0.2s\"\"/>  Today is <say-as interpret-as=\"date\" format=\"ymd\" detail=\"\"2\"\">\n    {{date}}  </say-as>  and this is your voice briefing <break time=\"0.5s\"/>",
+    "welcome_written": "Welcome 👋. This is your Voice Briefing. Which topic would you like headlines for?",
+    "initial_topic": "Which voice assistant would you like to hear the latest stories about?",
+    "which_article": "Which story would you like to hear more about?",
+    "ordinal_selection_reprompt": "Sorry, as in 1st, 2nd, or 3rd headline?",
+    "summary_intro": "Here's a short snippet of",
+    "next_moves": "Would you like to hear the next story or the list of topics?",
+    "next_moves_written": "Next story or the list of topics?",
+    "possible_topics": "Would you like to hear the latest stories about the Google Assistant, Alexa, Siri, Cortana, or Bixby?",
+    "ask_to_send_reminder": "You can always let me know if you would like me to send you the link to the full story.",
+    "account_linking_explanation": "I'll need you to link your account so I can send the story to your email. So",
+    "email.sent.confirmation": "Okay, I just sent you the story.  You might want to check your spam folder.",
+    "acountlink_canceled": "Sorry, you'll need to link your account so I can send the story to your email.",
+    "acountlink_error": "Sorry, there was a problem linking your account. It needs to be linked so I can send the story to your email.",
+    "unhandled_question": "Would you like to hear the list of topics?",
+    "help_menu": "I'm best at giving you an update on the exciting world of voice. I can keep you updated on the latest developments with the Google Assistant, Alexa, Siri, Cortana, or Bixby.",
+    "help_menu_written": "I'm best at giving you an update the exciting world of voice 🔊. I can keep you updated on the latest developments with the Google Assistant, Alexa, Siri, Cortana, or Bixby.",
+    "about": "I'm the Voice Briefing Assistant. I'm here to give you an update on everything that is going on in the exciting world of voice. In case you were wondering, I was created by the team at Vecgraph.com. If you're having trouble feel free to ask me for some help.",
+    "end": "Ok, bye!"
+  }
+}

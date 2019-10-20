@@ -39,7 +39,7 @@ This let’s the API load the articles into the cache so that when the voice app
 ### Initial Content. INTENT: “InitialContentIntent”
 Invoked by: show trending articles, go home, show me articles …
 
-Can provide welcome message or help menu.
+Can provide welcome message or help_menu.
  Ask: Latest developments in _Topic1_ or _Topic2_
  
  

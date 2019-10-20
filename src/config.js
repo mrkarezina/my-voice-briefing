@@ -33,23 +33,16 @@ module.exports = {
     //     }
     // },
 
+    // Need to be commented out while running unit tests so only i18n keys returned. https://www.jovo.tech/docs/unit-testing
+    i18n: {
+        returnNull: false,
+        fallbackLng: 'en-US',
+    },
+
     db: {
         Firestore: {
             credential: require('./firebase-private-key'),
             databaseURL: 'https://wyzefind-jovo-integration.firebaseio.com'
-        }
-    },
-    cms: {
-        GoogleSheetsCMS: {
-            spreadsheetId: '1R5k907bpjR1krDXwxHlC8ikpDeN0OS4fXJiuoDz33Ig',
-            access: 'public',
-            sheets: [
-                {
-                    name: 'responses',
-                    type: 'Responses',
-                    position: 1
-                }
-            ]
         }
     },
 

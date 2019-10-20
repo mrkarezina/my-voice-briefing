@@ -13,13 +13,13 @@ module.exports = {
 
         let speech = this.t('Here are the latest Google Assistant stories.');
         speech += ssmlTitlesBuilder(this.$user.$data.articles);
-        speech += `<break time="1.2s"/> ${this.t('which.article')}`;
+        speech += `<break time="1.2s"/> ${this.t('which_article')}`;
 
         const articleList = ArticleHeadlineListBuilder(this.$user.$data.articles);
 
         this.$googleAction.showList(articleList);
 
-        let written = this.t('which.article');
+        let written = this.t('which_article');
 
         //So Unhandled() can deal with users who don't use ordinal selection
         this.$user.$data.isOrdinalSelection = true;
@@ -33,13 +33,13 @@ module.exports = {
 
         let speech = this.t('Here are the latest Alexa stories.');
         speech += ssmlTitlesBuilder(this.$user.$data.articles);
-        speech += `<break time="1.2s"/> ${this.t('which.article')}`;
+        speech += `<break time="1.2s"/> ${this.t('which_article')}`;
 
         const articleList = ArticleHeadlineListBuilder(this.$user.$data.articles);
 
         this.$googleAction.showList(articleList);
 
-        let written = this.t('which.article');
+        let written = this.t('which_article');
 
         //So Unhandled() can deal with users who don't use ordinal selection
         this.$user.$data.isOrdinalSelection = true;
@@ -53,13 +53,13 @@ module.exports = {
 
         let speech = this.t('Here are the latest Siri stories.');
         speech += ssmlTitlesBuilder(this.$user.$data.articles);
-        speech += `<break time="1.2s"/> ${this.t('which.article')}`;
+        speech += `<break time="1.2s"/> ${this.t('which_article')}`;
 
         const articleList = ArticleHeadlineListBuilder(this.$user.$data.articles);
 
         this.$googleAction.showList(articleList);
 
-        let written = this.t('which.article');
+        let written = this.t('which_article');
 
         //So Unhandled() can deal with users who don't use ordinal selection
         this.$user.$data.isOrdinalSelection = true;
@@ -73,13 +73,13 @@ module.exports = {
 
         let speech = this.t('Here are the latest Bixby stories.');
         speech += ssmlTitlesBuilder(this.$user.$data.articles);
-        speech += `<break time="1.2s"/> ${this.t('which.article')}`;
+        speech += `<break time="1.2s"/> ${this.t('which_article')}`;
 
         const articleList = ArticleHeadlineListBuilder(this.$user.$data.articles);
 
         this.$googleAction.showList(articleList);
 
-        let written = this.t('which.article');
+        let written = this.t('which_article');
 
         //So Unhandled() can deal with users who don't use ordinal selection
         this.$user.$data.isOrdinalSelection = true;
@@ -93,13 +93,13 @@ module.exports = {
 
         let speech = this.t('Here are the latest Cortana stories.');
         speech += ssmlTitlesBuilder(this.$user.$data.articles);
-        speech += `<break time="1.2s"/> ${this.t('which.article')}`;
+        speech += `<break time="1.2s"/> ${this.t('which_article')}`;
 
         const articleList = ArticleHeadlineListBuilder(this.$user.$data.articles);
 
         this.$googleAction.showList(articleList);
 
-        let written = this.t('which.article');
+        let written = this.t('which_article');
 
         //So Unhandled() can deal with users who don't use ordinal selection
         this.$user.$data.isOrdinalSelection = true;

@@ -63,22 +63,22 @@ app.setHandler({
             const date = new Date().toLocaleDateString();
 
             // Using i18n keys with parameters
-            speech += this.t('welcome.m', {date: date})
-            written += this.t('welcome.written') + ' ';
+            speech += this.t('welcome', {date: date});
+            written += this.t('welcome_written') + ' ';
 
             this.$user.$data.isWelcome = false;
         }
 
         if (this.$user.$data.isHelp) {
-            //This acts as the help menu, since HelpIntent is a redirect
+            //This acts as the help_menu, since HelpIntent is a redirect
 
-            speech += `${this.t('help.menu')} <break time="0.5s"/>`;
-            written += this.t('help.menu.written');
+            speech += `${this.t('help_menu')} <break time="0.5s"/>`;
+            written += this.t('help_menu_written');
 
             this.$user.$data.isHelp = false
         }
 
-        speech += this.t('initial.topic');
+        speech += this.t('initial_topic');
 
         this.$googleAction.showSuggestionChips(['Google Assistant', 'Alexa', 'Siri', 'Cortana', 'Bixby']);
         this.displayText(written.toString()).ask(speech)
@@ -94,21 +94,21 @@ app.setHandler({
 
         //A reminder for user to ask for email
         if (this.$user.$data.askToSendEmailReminder) {
-            speech += this.t('ask.to.send.reminder') + ' ';
+            speech += this.t('ask_to_send_reminder') + ' ';
             this.$user.$data.askToSendEmailReminder = false
         }
 
-        speech += `${this.t('summary.intro')} ${article['title']} <break time="0.5s"/>`;
+        speech += `${this.t('summary_intro')} ${article['title']} <break time="0.5s"/>`;
 
         //Don't repeat title in summary
         speech += article['summary'].replace(article['title'], ' ');
-        speech += `<break time="0.7s"/> ${this.t('next.moves')}`;
+        speech += `<break time="0.7s"/> ${this.t('next_moves')}`;
 
         const basicCard = ArticleInfoCardBuilder(article);
         this.$googleAction.showBasicCard(basicCard);
         this.$googleAction.showSuggestionChips(['Next ⏩', 'Topics', 'Email Link']);
 
-        this.followUpState('SELECT_NEXT_MOVE').displayText(this.t('next.moves.written').toString()).ask(speech);
+        this.followUpState('SELECT_NEXT_MOVE').displayText(this.t('next_moves_written').toString()).ask(speech);
     },
 
     EmailArticleLinkIntent() {
@@ -117,7 +117,7 @@ app.setHandler({
 
         if (!userData) {
             //If no user data, go through account linking flow
-            this.ask(this.t('account.linking.explanation'));
+            this.ask(this.t('account_linking_explanation'));
             return this.showAccountLinkingCard();
 
         } else {
@@ -131,7 +131,7 @@ app.setHandler({
             sendArticleLinkEmail(article, given_name, email);
 
             let speech = this.t('email.sent.confirmation') + ' ';
-            speech += this.t('next.moves');
+            speech += this.t('next_moves');
 
             this.$googleAction.showSuggestionChips(['Next ⏩', 'Topics']);
             this.followUpState('SELECT_NEXT_MOVE').ask(speech);
@@ -141,8 +141,8 @@ app.setHandler({
     ON_SIGN_IN() {
         if (this.$googleAction.getSignInStatus() === 'CANCELLED') {
 
-            let speech = this.t('acountlink.canceled') + ' ';
-            speech += this.t('next.moves');
+            let speech = this.t('acountlink_canceled') + ' ';
+            speech += this.t('next_moves');
 
             this.$googleAction.showSuggestionChips(['Next ⏩', 'Topics']);
             this.followUpState('SELECT_NEXT_MOVE').ask(speech);
@@ -156,8 +156,8 @@ app.setHandler({
 
         } else if (this.$googleAction.getSignInStatus() === 'ERROR') {
 
-            let speech = this.t('acountlink.error') + ' ';
-            speech += this.t('next.moves');
+            let speech = this.t('acountlink_error') + ' ';
+            speech += this.t('next_moves');
 
             this.$googleAction.showSuggestionChips(['Next ⏩', 'Topics']);
             this.followUpState('SELECT_NEXT_MOVE').ask(speech);
@@ -168,7 +168,7 @@ app.setHandler({
     ListOfTopicsIntent() {
 
         this.$googleAction.showSuggestionChips(['Google Assistant', 'Alexa', 'Siri', 'Cortana', 'Bixby']);
-        this.displayText('Which topic?').ask(this.t('possible.topics'));
+        this.displayText('Which topic?').ask(this.t('possible_topics'));
 
     },
 
@@ -255,11 +255,11 @@ app.setHandler({
         if (this.$user.$data.isOrdinalSelection) {
 
             this.$user.$data.isOrdinalSelection = false;
-            return this.followUpState('ORDINAL_SELECTION_STATE').ask(this.t('ordinal.selection.reprompt'));
+            return this.followUpState('ORDINAL_SELECTION_STATE').ask(this.t('ordinal_selection_reprompt'));
         }
 
         //Generate Sorry message
-        this.$speech.addText(["I had trouble understanding.", "I’m sorry. I’m having some trouble understanding what you said.", "I didn’t quite get that."]).addText(this.t('unhandled.question'));
+        this.$speech.addText(["I had trouble understanding.", "I’m sorry. I’m having some trouble understanding what you said.", "I didn’t quite get that."]).addText(this.t('unhandled_question'));
         this.followUpState('TRY_AGAIN').ask(this.$speech);
 
     },
