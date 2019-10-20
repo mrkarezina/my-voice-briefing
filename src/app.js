@@ -11,8 +11,6 @@ const {JovoDebugger} = require('jovo-plugin-debugger');
 const {Firestore} = require('jovo-db-firestore');
 const {GoogleSheetsCMS} = require('jovo-cms-googlesheets');
 const {DashbotGoogleAssistant} = require('jovo-analytics-dashbot');
-const { ChatbaseGoogleAssistant } = require('jovo-analytics-chatbase');
-
 
 const jwt = require('jsonwebtoken');
 
@@ -29,7 +27,6 @@ app.use(
     new JovoDebugger(),
     new Firestore(),
     new GoogleSheetsCMS(),
-    new ChatbaseGoogleAssistant(),
     new DashbotGoogleAssistant()
 );
 
