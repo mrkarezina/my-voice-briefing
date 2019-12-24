@@ -1,6 +1,6 @@
 # My Voice Briefing
 
-Check it out in the [Google Assistant](https://assistant.google.com/services/a/uid/000000948558d976?hl=en_ca). Or ask your assistant, _"Hey Google, talk to My Voice Briefing"_.
+Check it out on the [Google Assistant](https://assistant.google.com/services/a/uid/000000948558d976?hl=en_ca). Or ask your assistant, _"Hey Google, talk to My Voice Briefing"_.
 
 ## Actions on Google Directory Info
 **Short Description:** My Voice Briefing allows you to explore stories covering the voice space
@@ -86,16 +86,16 @@ Show: Image, Title, Description, Link to read full
 
 
 ### Email story link | Intent: **EmailArticleLinkIntent**
-If the user is signed in get their email from `this.$user.$data.email`
-Send the email containing information on the story using the SendGrid API.
+If the user is signed in get their email from `this.$user.$data.email`.
+Can then send the email containing information on the story using the SendGrid API.
 
 Use node.js client to populate the template variables and send a [transactional email](https://github.com/sendgrid/sendgrid-nodejs/blob/master/use-cases/transactional-templates.md) template using the templateID.
 
 **Ask:** What to do next?
 
-Use this.$user.$data.accountData to check if the user is signed in.
-If not use return this.showAccountLinkingCard(); [Guide](https://www.jovo.tech/docs/data#account-linking).
-Handle the sign in with the ON_SIGN_IN() intent.
+Use `this.$user.$data.accountData` to check if the user is signed in.
+If not, then show the user and account linking card with `this.showAccountLinkingCard();`. [Guide](https://www.jovo.tech/docs/data#account-linking).
+The sign in itself is handled with the `ON_SIGN_IN()` intent.
 
 ### Next story (YES or NO) | Intent: **NextStoryIntent**
 Can only be invoked if there is a this.followUpState(‘SelectNextMove’) called before.
@@ -119,7 +119,7 @@ Set a follow up state TRY_AGAIN for routing the Yes / No intents in this context
 Asks with a random choice from: `["I had trouble understanding.", "I’m sorry. I’m having some trouble understanding what you said.", "I didn’t quite get that."]`.
 The YesIntent is trained to recognize "go back" as a phrase if the user chooses to repeat the question instead of saying yes.
 
-Asks: Do you want to go back?
+**Ask:** Do you want to go back?
 
 
 ## Project Resources
