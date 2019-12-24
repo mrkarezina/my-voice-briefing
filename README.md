@@ -5,10 +5,12 @@ Check it out on the [Google Assistant](https://assistant.google.com/services/a/u
 ## Usage
 
 Install packages: `npm install`
+
 Start the dev server with: `jovo run --watch`
 
 ### Testing
 So make sure only the i18n keys are returned instead of the full text go to `src/config.js` and comment out the specified section.
+
 Run tests with: `jest test`
 
 ### Deployment
