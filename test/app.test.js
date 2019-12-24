@@ -1,5 +1,5 @@
 'use strict';
-const {App, Util} = require('jovo-framework');
+
 const {GoogleAssistant} = require('jovo-platform-googleassistant');
 jest.setTimeout(5000);
 
@@ -11,7 +11,7 @@ describe(`Testing Google Assistant Integration`, () => {
 
     test('Launch intent', async () => {
 
-        const conversation = testSuite.conversation({locale: 'keys-only'});
+        const conversation = testSuite.conversation({ locale: 'keys-only' });
 
         const launchRequest = await testSuite.requestBuilder.launch();
         const responseLaunchRequest = await conversation.send(launchRequest);

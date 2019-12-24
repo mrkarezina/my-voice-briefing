@@ -2,6 +2,22 @@
 
 Check it out on the [Google Assistant](https://assistant.google.com/services/a/uid/000000948558d976?hl=en_ca). Or ask your assistant, _"Hey Google, talk to My Voice Briefing"_.
 
+## Usage
+
+Install packages: `npm install`
+Start the dev server with: `jovo run --watch`
+
+### Testing
+So make sure only the i18n keys are returned instead of the full text go to `src/config.js` and comment out the specified section.
+Run tests with: `jest test`
+
+### Deployment
+To deploy the language model to google assistant run: `jovo build -p googleAction --deploy`
+**Note:** Every time you run this command to deploy to dialogueflow your webhook will be reset to the endpoint specified in `project.js`.
+
+To create zip bundle for Google Cloud Function: `npm run bundle`
+
+
 ## Actions on Google Directory Info
 **Short Description:** My Voice Briefing allows you to explore stories covering the voice space
 

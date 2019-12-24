@@ -16,7 +16,6 @@ exports.getInitialContent = async (urlSelected) => {
         uri: WYZEFIND_RSS_URL,
         json: true, // Automatically parses the JSON string in the response
 
-        //TODO: can;t have variable
         body: {
             rss_url: urlSelected,
         }

@@ -4,6 +4,16 @@
 // ------------------------------------------------------------------
 
 module.exports = {
+
+    // COMMENT OUT WHEN RUNNING TESTS
+    // -------------------
+    // Need to be commented out while running unit tests so only i18n keys returned. https://www.jovo.tech/docs/unit-testing
+    i18n: {
+        returnNull: false,
+        fallbackLng: 'en-US',
+    },
+    // -------------------
+
     logging: true,
 
     // user: {
@@ -32,12 +42,6 @@ module.exports = {
     //         pathToFile: '../db/db.json',
     //     }
     // },
-
-    // Need to be commented out while running unit tests so only i18n keys returned. https://www.jovo.tech/docs/unit-testing
-    i18n: {
-        returnNull: false,
-        fallbackLng: 'en-US',
-    },
 
     db: {
         Firestore: {
